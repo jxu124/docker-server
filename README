@@ -15,7 +15,7 @@ docker run --rm -it -v "${PWD}/acme.sh/config":/acme.sh --net=host neilpang/acme
 docker run --rm -it -v "${PWD}/acme.sh/config":/acme.sh --net=host neilpang/acme.sh --issue -d example.com -d *.example.com --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --renew
 
 # Step 4: Build docker-compose
-git clone 
+git clone https://github.com/jxu124/docker-server
 sh upload_unmask.sh
 rm -r traefik/config/example.com
 cp -r acme.sh/config/example.com traefik/config
