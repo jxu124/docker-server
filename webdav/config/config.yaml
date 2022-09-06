@@ -46,7 +46,7 @@
 # Server related settings
 address: 0.0.0.0
 port: 80
-auth: false
+auth: true
 tls: false
 cert: cert.pem
 key: key.pem
@@ -54,7 +54,7 @@ prefix: /
 debug: false
 
 # Default user settings (will be merged)
-scope: /data/open_share
+scope: /data
 modify: false
 rules: []
 
