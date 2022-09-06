@@ -1,0 +1,16 @@
+version: "3"
+services:
+  traefik:
+    image: 'traefik:2.8.4'
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./traefik/config/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/config:/etc/traefik/config
+
+networks:
+  traefik_default:
+    external: true

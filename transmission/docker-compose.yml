@@ -1,0 +1,21 @@
+version: "3"
+services:
+  transmission:  # 9091
+    image: 'antonyxu/transmission'
+    container_name: transmission
+    restart: unless-stopped
+    ports:
+     - '51413:51413'
+     - '51413:51413/udp'
+    environment:
+      TM_UID: 1000
+      TM_GID: 1000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./transmission/config:/home/user/.config/transmission-daemon
+      - /data/downloads:/home/user/Downloads
+
+networks:
+  traefik_default:
+    external: true

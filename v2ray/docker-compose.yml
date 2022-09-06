@@ -1,0 +1,13 @@
+version: "3"
+services:
+  v2ray:  # 1080
+    image: antonyxu/v2ray
+    container_name: v2ray
+    restart: unless-stopped
+    volumes:
+      - ./v2ray/config/config.json:/etc/v2ray/config.json
+      - ./v2ray/config:/var/log/v2ray
+
+networks:
+  traefik_default:
+    external: true

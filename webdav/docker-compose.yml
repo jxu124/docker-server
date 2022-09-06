@@ -1,0 +1,16 @@
+version: "3"
+services:
+  webdav:  # 80
+    image: antonyxu/webdav
+    container_name: webdav
+    restart: unless-stopped
+    user: 1000:1000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./webdav/config/config.yaml:/config.yaml
+      - /data:/data
+
+networks:
+  traefik_default:
+    external: true
