@@ -5,6 +5,8 @@ services:
     container_name: webdav
     restart: unless-stopped
     user: 1000:1000
+    networks:
+      - traefik_default
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

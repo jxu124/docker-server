@@ -4,6 +4,8 @@ services:
     image: antonyxu/v2ray
     container_name: v2ray
     restart: unless-stopped
+    networks:
+      - traefik_default
     volumes:
       - ./config/config.json:/etc/v2ray/config.json
       - ./config:/var/log/v2ray

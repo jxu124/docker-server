@@ -4,6 +4,8 @@ services:
     image: 'antonyxu/transmission'
     container_name: transmission
     restart: unless-stopped
+    networks:
+      - traefik_default
     ports:
      - '51413:51413'
      - '51413:51413/udp'
