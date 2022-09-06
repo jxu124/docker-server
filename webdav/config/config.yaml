@@ -1,0 +1,80 @@
+# webdav
+# Introduce: https://blog.csdn.net/leisurelen/article/details/121620499
+# Configure: https://github.com/hacdias/webdav
+# Releases: https://github.com/hacdias/webdav/releases/download/v4.2.0/linux-amd64-webdav.tar.gz
+
+# [ webdav -h ]
+# If you don't set "config", it will look for a configuration file called
+# config.{json, toml, yaml, yml} in the following directories:
+
+# - ./
+# - /etc/webdav/
+
+# The precedence of the configuration values are as follows:
+
+# - flags
+# - environment variables
+# - configuration file
+# - defaults
+
+# The environment variables are prefixed by "WD_" followed by the option
+# name in caps. So to set "cert" via an env variable, you should
+# set WD_CERT.
+
+# Usage:
+#   webdav [flags]
+#   webdav [command]
+
+# Available Commands:
+#   help        Help about any command
+#   version     Print the version number
+
+# Flags:
+#   -a, --address string      address to listen to (default "0.0.0.0")
+#       --auth                enable auth (default true)
+#       --cert string         TLS certificate (default "cert.pem")
+#   -c, --config string       config file path
+#   -h, --help                help for webdav
+#       --key string          TLS key (default "key.pem")
+#       --log_format string   logging format (default "console")
+#   -p, --port string         port to listen to (default "0")
+#   -P, --prefix string       URL path prefix (default "/")
+#   -t, --tls                 enable tls
+
+# Use "webdav [command] --help" for more information about a command.
+
+# Server related settings
+address: 0.0.0.0
+port: 80
+auth: false
+tls: false
+cert: cert.pem
+key: key.pem
+prefix: /
+debug: false
+
+# Default user settings (will be merged)
+scope: /data/open_share
+modify: false
+rules: []
+
+# CORS configuration
+cors:
+  enabled: true
+  credentials: true
+  allowed_headers:
+    - Depth
+  allowed_hosts:
+    - https://file.example.com
+  allowed_methods:
+    - GET
+  exposed_headers:
+    - Content-Length
+    - Content-Range
+
+users:
+  # https://bcrypt.online/
+  # https://github.com/hacdias/webdav
+  - username: admin
+    password: "123456"
+    scope: /data

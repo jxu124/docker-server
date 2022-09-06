@@ -1,0 +1,66 @@
+version: "3"
+services:
+  traefik:
+    image: 'traefik:2.8.4'
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./traefik/config/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/config:/etc/traefik/config
+
+  v2ray:  # 1080
+    image: antonyxu/v2ray
+    container_name: v2ray
+    restart: unless-stopped
+    volumes:
+      - ./v2ray/config/config.json:/etc/v2ray/config.json
+      - ./v2ray/config:/var/log/v2ray
+
+  memos:  # 5230
+    image: neosmemo/memos
+    container_name: memos
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./memos/config:/var/opt/memos
+
+  transmission:  # 9091
+    image: 'antonyxu/transmission'
+    container_name: transmission
+    restart: unless-stopped
+    ports:
+     - '51413:51413'
+     - '51413:51413/udp'
+    environment:
+      TM_UID: 1000
+      TM_GID: 1000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./transmission/config:/home/user/.config/transmission-daemon
+      - /data/downloads:/home/user/Downloads
+
+  webdav:  # 80
+    image: antonyxu/webdav
+    container_name: webdav
+    restart: unless-stopped
+    user: 1000:1000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./webdav/config/config.yaml:/config.yaml
+      - /data:/data
+
+  # jupyter:  # 8888
+  #   image: jupyter/base-notebook
+  #   container_name: jupyter
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /etc/timezone:/etc/timezone:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ./jupyter/config:/home/jovyan/.jupyter
+  #     - /data:/home/jovyan/work

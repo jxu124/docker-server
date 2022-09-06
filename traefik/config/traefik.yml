@@ -1,0 +1,14 @@
+## traefik.yml
+
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+
+providers:
+  file:
+    filename: /etc/traefik/config/providers.yml
+
+api:
+  dashboard: true

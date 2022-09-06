@@ -1,0 +1,71 @@
+# https://doc.traefik.io/traefik/
+
+tls:
+  certificates:
+    - certFile: /etc/traefik/config/example.com/example.com.cer
+      keyFile: /etc/traefik/config/example.com/example.com.key
+
+http:
+  middlewares:
+    basic-auth:
+      basicAuth:
+        users:
+        # htpasswd -n admin -> admin:$apr1$4nu...
+        - "admin:$apr1$4nuBhmL6$rIfXGmd2OotIIp.2iW9XF/"
+
+  routers:
+    to-block:
+      rule: HostRegexp(`(\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}`)
+      service: block
+    to-dashboard:
+      rule: Host(`admin.example.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      tls: true
+      middlewares:
+      - basic-auth
+    to-memos:
+      rule: "Host(`memo.example.com`)"
+      service: memos
+      tls: true
+    to-transmission:
+      rule: "Host(`bt.example.com`)"
+      service: transmission
+      tls: true
+    to-webdav:
+      rule: "Host(`file.example.com`)"
+      service: webdav
+      tls: true
+    to-v2ray:
+      rule: "Host(`v.example.com`)"
+      service: v2ray
+      tls: true
+    to-jupyter:
+      rule: "Host(`py.example.com`)"
+      service: jupyter
+      tls: true
+
+  services:
+    block:
+      loadBalancer:
+        servers:
+        - url: http://0.0.0.0/
+    memos:
+      loadBalancer:
+        servers:
+        - url: http://memos:5230/
+    transmission:
+      loadBalancer:
+        servers:
+        - url: http://transmission:9091/
+    webdav:
+      loadBalancer:
+        servers:
+        - url: http://webdav:80/
+    v2ray:
+      loadBalancer:
+        servers:
+        - url: http://v2ray:1080/
+    jupyter:
+      loadBalancer:
+        servers:
+        - url: http://jupyter:8888/
