@@ -1,0 +1,16 @@
+version: "3"
+services:
+  memos:  # 5230
+    image: neosmemo/memos
+    container_name: memos
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/var/opt/memos
+
+networks:
+  traefik_default:
+    external: true

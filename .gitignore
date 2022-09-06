@@ -1,5 +1,5 @@
 anime_updater/config/*
-memos/*
+memos/config
 transmission/config
 v2ray/data
 upload_mask.sh
