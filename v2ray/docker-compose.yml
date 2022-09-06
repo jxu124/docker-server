@@ -5,8 +5,8 @@ services:
     container_name: v2ray
     restart: unless-stopped
     volumes:
-      - ./v2ray/config/config.json:/etc/v2ray/config.json
-      - ./v2ray/config:/var/log/v2ray
+      - ./config/config.json:/etc/v2ray/config.json
+      - ./config:/var/log/v2ray
 
 networks:
   traefik_default:

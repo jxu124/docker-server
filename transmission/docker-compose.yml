@@ -13,7 +13,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./transmission/config:/home/user/.config/transmission-daemon
+      - ./config:/home/user/.config/transmission-daemon
       - /data/downloads:/home/user/Downloads
 
 networks:
