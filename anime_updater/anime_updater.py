@@ -164,6 +164,7 @@ class Vision():
         cmd = cmd.replace("\"", "").replace("\'", "")
         for u in ulst:
             title, stamp, link = u['title'], u['stamp'], u['link']
+            link = "\"" + link + "\""
             assert os.system(cmd.format(link)) == 0
 
 

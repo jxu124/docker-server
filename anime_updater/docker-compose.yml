@@ -1,0 +1,18 @@
+version: "3"
+services:
+  anime_updater:
+    image: 'antonyxu/anime_updater'
+    container_name: anime_updater
+    restart: unless-stopped
+    user: 1000:1000
+    cpus: 0.25
+    networks:
+      - traefik_default
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /data/anime_query.txt:/anime_query.txt
+
+networks:
+  traefik_default:
+    external: true
