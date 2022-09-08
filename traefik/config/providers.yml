@@ -12,7 +12,6 @@ http:
         users:
         # htpasswd -n admin -> admin:$apr1$4nu...
         - "admin:$apr1$4nuBhmL6$rIfXGmd2OotIIp.2iW9XF/"
-  middlewares:
     block-redirectregex:
       redirectRegex:
         regex: "^(.*)"
@@ -25,6 +24,13 @@ http:
       service: block
       middlewares:
         - block-redirectregex
+    to-block-ssh:
+      rule: HostRegexp(`{others:(.*)}`)
+      priority: 1
+      service: block
+      tls: true
+      middlewares:
+        - block-redirectregex
     to-dashboard:
       rule: Host(`admin.example.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
@@ -35,6 +41,8 @@ http:
       rule: "Host(`ssh.example.com`)"
       service: webssh
       tls: true
+      middlewares:
+      - basic-auth
     to-memos:
       rule: "Host(`memo.example.com`)"
       service: memos
