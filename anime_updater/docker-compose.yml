@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   anime_updater:
     image: 'antonyxu/anime_updater'
