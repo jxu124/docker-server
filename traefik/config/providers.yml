@@ -12,17 +12,29 @@ http:
         users:
         # htpasswd -n admin -> admin:$apr1$4nu...
         - "admin:$apr1$4nuBhmL6$rIfXGmd2OotIIp.2iW9XF/"
+  middlewares:
+    block-redirectregex:
+      redirectRegex:
+        regex: "^(.*)"
+        replacement: "http://1.1.1.1/"
 
   routers:
     to-block:
-      rule: HostRegexp(`(\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}`)
+      rule: HostRegexp(`{others:(.*)}`)
+      priority: 1
       service: block
+      middlewares:
+        - block-redirectregex
     to-dashboard:
       rule: Host(`admin.example.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
       tls: true
       middlewares:
       - basic-auth
+    to-webssh:
+      rule: "Host(`ssh.example.com`)"
+      service: webssh
+      tls: true
     to-memos:
       rule: "Host(`memo.example.com`)"
       service: memos
@@ -49,6 +61,10 @@ http:
       loadBalancer:
         servers:
         - url: http://0.0.0.0/
+    webssh:
+      loadBalancer:
+        servers:
+        - url: http://webssh:8888/
     memos:
       loadBalancer:
         servers:
