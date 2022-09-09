@@ -22,14 +22,14 @@ jobs:
         cd webdav && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webdav && cd ..
         cd webssh && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webssh && cd ..
         cd transmission && docker build . -t ${{ secrets.DOCKER_USERNAME }}/transmission && cd ..
-        # cd anime_updater && docker build . -t ${{ secrets.DOCKER_USERNAME }}/anime_updater && cd ..
+        cd anime_updater && docker build . -t ${{ secrets.DOCKER_USERNAME }}/anime_updater && cd ..
         docker push ${{ secrets.DOCKER_USERNAME }}/v2ray
         docker push ${{ secrets.DOCKER_USERNAME }}/webdav
         docker push ${{ secrets.DOCKER_USERNAME }}/webssh
         docker push ${{ secrets.DOCKER_USERNAME }}/transmission
-        # docker push ${{ secrets.DOCKER_USERNAME }}/anime_updater
-    - uses: docker/build-push-action@v3.1.1
-      with:
-        context: anime_updater
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/anime_updater:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/anime_updater
+    # - uses: docker/build-push-action@v3.1.1
+    #   with:
+    #     context: anime_updater
+    #     push: true
+    #     tags: ${{ secrets.DOCKER_USERNAME }}/anime_updater:latest
