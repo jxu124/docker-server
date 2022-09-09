@@ -2,7 +2,7 @@
 
 tls:
   certificates:
-    - certFile: /etc/traefik/config/example.com/example.com.cer
+    - certFile: /etc/traefik/config/example.com/fullchain.cer
       keyFile: /etc/traefik/config/example.com/example.com.key
 
 http:
