@@ -45,6 +45,7 @@ jobs:
           fi
         done
     - name: Start docker compose
+      shell: bash
       run: |
         # start network first
         cd traefik && docker compose up -d && cd ..
@@ -55,16 +56,12 @@ jobs:
           fi
         done
         sleep 3
-        echo ECODE=$ECODE
+        echo "======== Test docker-compose ========"
         ECODE=0
-        echo ECODE=$ECODE
         for dirname in `ls`; do
           if [ -f ${dirname}/docker-compose.yml ]; then
-            echo "======== Test docker-compose for ${dirname} ========"
             RSTC=$(docker inspect -f "{{.RestartCount}}" ${dirname})
-            echo RSTC=$RSTC
             let "ECODE=$ECODE+$RSTC"
-            echo ECODE=$ECODE
             if [ ! $RSTC=="0" ]; then
               echo "[FAIL] the RestartCount of ${dirname}" is greater than 0.
             else
