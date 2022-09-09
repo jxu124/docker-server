@@ -20,7 +20,7 @@ jobs:
       run: |
         for dirname in `ls`; do
           if [ -f ${dirname}/Dockerfile ]; then
-            echo "\n\n======== Build for ${dirname} ========"
+            echo "======== Build for ${dirname} ========"
             cd ${dirname} && docker build . -t ${{ secrets.DOCKER_USERNAME }}/${dirname} && cd ..
           fi
         done
@@ -28,7 +28,7 @@ jobs:
       run: |
         for dirname in `ls`; do
           if [ -f ${dirname}/Dockerfile ]; then
-            echo "\n\n======== Push for ${dirname} ========"
+            echo "======== Push for ${dirname} ========"
             docker push ${{ secrets.DOCKER_USERNAME }}/${dirname}
           fi
         done
@@ -40,7 +40,7 @@ jobs:
       run: |
         for dirname in `ls`; do
           if [ -f ${dirname}/Dockerfile ]; then
-            echo "\n\n======== Build for ${dirname} ========"
+            echo "======== Build for ${dirname} ========"
             cd ${dirname} && docker build . -t ${{ secrets.DOCKER_USERNAME }}/${dirname} && cd ..
           fi
         done
@@ -50,16 +50,16 @@ jobs:
         cd traefik && docker compose up -d && cd ..
         for dirname in `ls`; do
           if [ -f ${dirname}/docker-compose.yml ]; then
-            echo "\n\n======== Start docker-compose for ${dirname} ========"
+            echo "======== Start docker-compose for ${dirname} ========"
             cd ${dirname} && docker compose up -d && cd ..
           fi
         done
         sleep 3
-        EXIT_CODE=0
+        ECODE=0
         for dirname in `ls`; do
           if [ -f ${dirname}/docker-compose.yml ]; then
             RSTC=$(docker inspect -f "{{.RestartCount}}" ${dirname})
-            let "EXIT_CODE=$EXIT_CODE+$RSTC"
+            let "ECODE=$ECODE+$RSTC"
             if [ ! $RSTC=="0" ]; then
               echo "[FAIL] the RestartCount of ${dirname}" is greater than 0.
             else
@@ -67,4 +67,4 @@ jobs:
             fi
           fi
         done
-        exit $EXIT_CODE
+        exit $ECODE
