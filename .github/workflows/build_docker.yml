@@ -60,10 +60,9 @@ jobs:
         ECODE=0
         for dirname in `ls`; do
           if [ -f ${dirname}/docker-compose.yml ]; then
-            RSTC=$(docker inspect -f "{{.RestartCount}}" ${dirname})
-            let "ECODE=$ECODE+$RSTC"
-            if [ ! $RSTC=="0" ]; then
+            if [ ! $(docker inspect -f "{{.RestartCount}}" ${dirname})=="0" ]; then
               echo "[FAIL] the RestartCount of ${dirname}" is greater than 0.
+              ECODE=1
             else
               echo "[OK] the RestartCount of ${dirname}" is 0.
             fi
