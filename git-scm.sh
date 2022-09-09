@@ -1,6 +1,6 @@
 #!/bin/sh
 # 
-if [ ! "$(git pull)"=="Already up to date.\n" ]
+if [ ! "$(git pull)"=="Already up to date.\n" ]; then
     git reset --hard
     git pull
     sh upload_unmask.sh
