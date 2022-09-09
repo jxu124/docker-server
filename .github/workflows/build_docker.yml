@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  FrpBuildx:
+  DockerBuildCI:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -18,18 +18,19 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build & Push the Docker image
       run: |
-        cd v2ray && docker build . -t antonyxu/v2ray && cd ..
-        cd webdav && docker build . -t antonyxu/webdav && cd ..
-        cd webssh && docker build . -t antonyxu/webssh && cd ..
-        cd transmission && docker build . -t antonyxu/transmission && cd ..
-        # cd anime_updater && docker build . -t antonyxu/anime_updater && cd ..
-        docker push antonyxu/v2ray
-        docker push antonyxu/webdav
-        docker push antonyxu/webssh
-        docker push antonyxu/transmission
-        # docker push antonyxu/anime_updater
+        cd v2ray && docker build . -t ${{ secrets.DOCKER_USERNAME }}/v2ray && cd ..
+        cd webdav && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webdav && cd ..
+        cd webssh && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webssh && cd ..
+        cd transmission && docker build . -t ${{ secrets.DOCKER_USERNAME }}/transmission && cd ..
+        # cd anime_updater && docker build . -t ${{ secrets.DOCKER_USERNAME }}/anime_updater && cd ..
+        docker push ${{ secrets.DOCKER_USERNAME }}/v2ray
+        docker push ${{ secrets.DOCKER_USERNAME }}/webdav
+        docker push ${{ secrets.DOCKER_USERNAME }}/webssh
+        docker push ${{ secrets.DOCKER_USERNAME }}/transmission
+        # docker push ${{ secrets.DOCKER_USERNAME }}/anime_updater
+      with:
     - uses: docker/build-push-action@v3.1.1
       with:
         context: anime_updater
         push: true
-        tags: antonyxu/anime_updater:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/anime_updater:latest
