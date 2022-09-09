@@ -24,7 +24,7 @@ http:
       service: block
       middlewares:
         - block-redirectregex
-    to-block-ssh:
+    to-block-tls:
       rule: HostRegexp(`{others:(.*)}`)
       priority: 1
       service: block

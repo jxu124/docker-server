@@ -8,7 +8,7 @@ services:
       - traefik_default
     volumes:
       - ./config/config.json:/etc/v2ray/config.json
-      - ./config:/var/log/v2ray
+      - ./data:/var/log/v2ray
 
 networks:
   traefik_default:

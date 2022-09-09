@@ -1,4 +1,4 @@
-name: Docker Build CI
+name: Docker Test CI
 
 on:
   # schedule:
@@ -16,20 +16,51 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build & Push the Docker image
+    - name: Build docker images
       run: |
-        cd v2ray && docker build . -t ${{ secrets.DOCKER_USERNAME }}/v2ray && cd ..
-        cd webdav && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webdav && cd ..
-        cd webssh && docker build . -t ${{ secrets.DOCKER_USERNAME }}/webssh && cd ..
-        cd transmission && docker build . -t ${{ secrets.DOCKER_USERNAME }}/transmission && cd ..
-        cd anime_updater && docker build . -t ${{ secrets.DOCKER_USERNAME }}/anime_updater && cd ..
-        docker push ${{ secrets.DOCKER_USERNAME }}/v2ray
-        docker push ${{ secrets.DOCKER_USERNAME }}/webdav
-        docker push ${{ secrets.DOCKER_USERNAME }}/webssh
-        docker push ${{ secrets.DOCKER_USERNAME }}/transmission
-        docker push ${{ secrets.DOCKER_USERNAME }}/anime_updater
-    # - uses: docker/build-push-action@v3.1.1
-    #   with:
-    #     context: anime_updater
-    #     push: true
-    #     tags: ${{ secrets.DOCKER_USERNAME }}/anime_updater:latest
+        for dirname in `ls`; do
+          if [ -f ${dirname}/Dockerfile ]; then
+            echo "\n\n======== Build for ${dirname} ========"
+            cd ${dirname} && docker build . -t ${{ secrets.DOCKER_USERNAME }}/${dirname} && cd ..
+          fi
+        done
+    - name: Push docker images
+      run: |
+        for dirname in `ls`; do
+          if [ -f ${dirname}/Dockerfile ]; then
+            echo "\n\n======== Push for ${dirname} ========"
+            docker push ${{ secrets.DOCKER_USERNAME }}/${dirname}
+          fi
+        done
+  DockerTestCI:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker images
+      run: |
+        for dirname in `ls`; do
+          if [ -f ${dirname}/Dockerfile ]; then
+            echo "\n\n======== Build for ${dirname} ========"
+            cd ${dirname} && docker build . -t ${{ secrets.DOCKER_USERNAME }}/${dirname} && cd ..
+          fi
+        done
+    - name: Start docker compose
+      run: |
+        # start network first
+        cd traefik && docker compose up -d && cd ..
+        for dirname in `ls`; do
+          if [ -f ${dirname}/docker-compose.yml ]; then
+            echo "\n\n======== Start docker-compose for ${dirname} ========"
+            cd ${dirname} && docker compose up -d && cd ..
+          fi
+        done
+        sleep 3
+        for dirname in `ls`; do
+          if [ -f ${dirname}/docker-compose.yml ]; then
+            if [ ! $(docker inspect -f "{{.RestartCount}}" ${dirname})=="0" ]; then
+              echo "[FAIL] the RestartCount of ${dirname}" is greater than 0.
+            else
+              echo "[OK] the RestartCount of ${dirname}" is 0.
+            fi
+          fi
+        done
