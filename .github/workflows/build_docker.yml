@@ -28,7 +28,6 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/webssh
         docker push ${{ secrets.DOCKER_USERNAME }}/transmission
         # docker push ${{ secrets.DOCKER_USERNAME }}/anime_updater
-      with:
     - uses: docker/build-push-action@v3.1.1
       with:
         context: anime_updater
