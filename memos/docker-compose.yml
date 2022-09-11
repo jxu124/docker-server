@@ -1,7 +1,7 @@
 version: "3"
 services:
   memos:  # 5230
-    image: neosmemo/memos
+    image: neosmemo/memos:0.4.3
     container_name: memos
     restart: unless-stopped
     networks:

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-echo "Find update!"
 git reset --hard
 git pull
 sh upload_unmask.sh
