@@ -1,0 +1,7 @@
+{
+    "port":80,
+    "baseURL": "",
+    "address": "",
+    "database": "/database.db",
+    "root": "/srv"
+}
