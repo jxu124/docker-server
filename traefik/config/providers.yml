@@ -4,6 +4,9 @@ tls:
   certificates:
     - certFile: /etc/traefik/config/example.com/example.com.cer
       keyFile: /etc/traefik/config/example.com/example.com.key
+  options:
+    default:
+      sniStrict: true
 
 http:
   middlewares:
@@ -12,25 +15,8 @@ http:
         users:
         # htpasswd -n admin -> admin:$apr1$4nu...
         - "admin:$apr1$4nuBhmL6$rIfXGmd2OotIIp.2iW9XF/"
-    block-redirectregex:
-      redirectRegex:
-        regex: "^(.*)"
-        replacement: "http://1.1.1.1/"
 
   routers:
-    to-block:
-      rule: HostRegexp(`{others:(.*)}`)
-      priority: 1
-      service: block
-      middlewares:
-        - block-redirectregex
-    to-block-tls:
-      rule: HostRegexp(`{others:(.*)}`)
-      priority: 1
-      service: block
-      tls: true
-      middlewares:
-        - block-redirectregex
     to-dashboard:
       rule: Host(`admin.example.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
@@ -65,10 +51,6 @@ http:
       tls: true
 
   services:
-    block:
-      loadBalancer:
-        servers:
-        - url: http://0.0.0.0/
     webssh:
       loadBalancer:
         servers:
