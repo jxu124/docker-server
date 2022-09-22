@@ -1,4 +1,5 @@
 # https://doc.traefik.io/traefik/
+# https://www.cdn77.com/tls-test
 
 tls:
   certificates:
@@ -7,6 +8,7 @@ tls:
   options:
     default:
       sniStrict: true
+      minVersion: VersionTLS12
 
 http:
   middlewares:
