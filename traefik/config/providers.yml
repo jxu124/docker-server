@@ -49,6 +49,10 @@ http:
       rule: "Host(`py.example.com`)"
       service: jupyter
       tls: true
+    to-filebrowser:
+      rule: "Host(`share.example.com`)"
+      service: filebrowser
+      tls: true
 
   services:
     webssh:
@@ -75,3 +79,7 @@ http:
       loadBalancer:
         servers:
         - url: http://jupyter:8888/
+    filebrowser:
+      loadBalancer:
+        servers:
+        - url: http://filebrowser:80/
